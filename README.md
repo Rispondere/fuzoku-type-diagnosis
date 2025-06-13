@@ -9,7 +9,7 @@
 - 相性分析と指導マニュアル
 
 ## 使用方法
-1. [メインページ](https://yourusername.github.io/fuzoku-type-diagnosis/)にアクセス
+1. [メインページ](https://Rispondere.github.io/fuzoku-type-diagnosis/)にアクセス
 2. 診断したい対象を選択
 3. 質問に回答して結果を確認
 
