@@ -1,0 +1,1 @@
+# fuzoku-type-diagnosis
