@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタッフ向け：タイプ別指導マニュアル</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro-section {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+
+        .intro-section h2 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .intro-section p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .type-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 6px solid;
+            transition: all 0.3s ease;
+        }
+
+        .type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .type-a { border-left-color: #e74c3c; }
+        .type-b { border-left-color: #f39c12; }
+        .type-c { border-left-color: #27ae60; }
+        .type-d { border-left-color: #9b59b6; }
+
+        .type-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .type-emoji {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .type-title {
+            flex: 1;
+        }
+
+        .type-title h3 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .type-subtitle {
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+
+        .management-section {
+            margin-bottom: 20px;
+        }
+
+        .management-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .management-section p, .management-section ul {
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .management-section ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .management-section li {
+            margin-bottom: 5px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .good-practice {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #27ae60;
+        }
+
+        .bad-practice {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-color: #e74c3c;
+        }
+
+        .compatibility-matrix {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .compatibility-matrix h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .matrix-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .matrix-item h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .compat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .compat-good {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .compat-bad {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tips-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .tips-section h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tip-item h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .tip-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tip-item li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tip-item li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .type-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .matrix-grid, .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 スタッフ向け：タイプ別指導マニュアル</h1>
+            <p>キャストの診断結果をもとに、効果的な指導・面談を行うための参考資料</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-section">
+                <h2>🎯 このマニュアルの活用方法</h2>
+                <p>キャストの診断結果に基づいて、一人ひとりに最適な指導・教育・面談を行うためのガイドラインです。各タイプの特徴を理解し、個性を活かした店舗運営にお役立てください。</p>
+            </div>
+
+            <div class="type-grid">
+                <!-- Aタイプ：信頼型 -->
+                <div class="type-card type-a">
+                    <div class="type-header">
+                        <div class="type-emoji">🤝</div>
+                        <div class="type-title">
+                            <h3>Aタイプ：信頼型</h3>
+                            <div class="type-subtitle">真面目・時間厳守・安心感</div>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>✅ 特徴・性格</h4>
+                        <ul>
+                            <li>ルールを守り、責任感が強い</li>
+                            <li>お客様との約束や時間を重視</li>
+                            <li>清潔感があり、丁寧な対応を心がける</li>
+                            <li>新人指導や後輩の面倒見が良い</li>
+                        </ul>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🎯 効果的な指導方針</h4>
+                        <div class="highlight-box good-practice">
+                            <p><strong>◎ 推奨アプローチ</strong></p>
+                            <ul>
+                                <li>明確なマニュアル・手順を提示する</li>
+                                <li>段取りや計画を立てて任せる</li>
+                                <li>定期的な振り返りと目標設定</li>
+                                <li>責任ある仕事を任せて信頼関係を築く</li>
+                            </ul>
+                        </div>
+                        <div class="highlight-box bad-practice">
+                            <p><strong>🚫 NGアプローチ</strong></p>
+                            <ul>
+                                <li>曖昧な指示や場当たり的な対応</li>
+                                <li>急な変更や無計画な指示</li>
+                                <li>自由すぎる環境で放任主義</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🗣 効果的な声かけ例</h4>
+                        <div class="highlight-box">
+                            <ul>
+                                <li>「いつも丁寧に対応してくれてありがとう」</li>
+                                <li>「あなたがいてくれると安心して任せられる」</li>
+                                <li>「お客様からの信頼度が高いですね」</li>
+                                <li>「責任感があって素晴らしいです」</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bタイプ：元気型 -->
+                <div class="type-card type-b">
+                    <div class="type-header">
+                        <div class="type-emoji">✨</div>
+                        <div class="type-title">
+                            <h3>Bタイプ：元気型</h3>
+                            <div class="type-subtitle">ノリ良し・人懐っこい・初対面に強い</div>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>✅ 特徴・性格</h4>
+                        <ul>
+                            <li>明るく社交的で場を盛り上げる</li>
+                            <li>新規のお客様との距離感が上手</li>
+                            <li>会話力があり、話題が豊富</li>
+                            <li>チームのムードメーカー的存在</li>
+                        </ul>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🎯 効果的な指導方針</h4>
+                        <div class="highlight-box good-practice">
+                            <p><strong>◎ 推奨アプローチ</strong></p>
+                            <ul>
+                                <li>褒めて伸ばす指導法を採用</li>
+                                <li>ある程度の自由度を与える</li>
+                                <li>ポジティブなフィードバックを多用</li>
+                                <li>新規開拓やイベント企画を任せる</li>
+                            </ul>
+                        </div>
+                        <div class="highlight-box bad-practice">
+                            <p><strong>🚫 NGアプローチ</strong></p>
+                            <ul>
+                                <li>厳しすぎる指導や批判的な態度</li>
+                                <li>細かすぎるルールや制限</li>
+                                <li>注意ばかりでテンションを下げる</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🗣 効果的な声かけ例</h4>
+                        <div class="highlight-box">
+                            <ul>
+                                <li>「今日も明るくて周りが助かってる」</li>
+                                <li>「君のSNS投稿、いつも面白いね」</li>
+                                <li>「お客様との会話が上手で勉強になる」</li>
+                                <li>「みんなのムードメーカーでありがとう」</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cタイプ：癒し型 -->
+                <div class="type-card type-c">
+                    <div class="type-header">
+                        <div class="type-emoji">🌸</div>
+                        <div class="type-title">
+                            <h3>Cタイプ：癒し型</h3>
+                            <div class="type-subtitle">おっとり・聞き役・空気を読む</div>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>✅ 特徴・性格</h4>
+                        <ul>
+                            <li>穏やかで優しい雰囲気</li>
+                            <li>お客様の話をよく聞く</li>
+                            <li>空気を読むのが得意</li>
+                            <li>控えめで協調性がある</li>
+                        </ul>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🎯 効果的な指導方針</h4>
+                        <div class="highlight-box good-practice">
+                            <p><strong>◎ 推奨アプローチ</strong></p>
+                            <ul>
+                                <li>焦らせず寄り添い型で育てる</li>
+                                <li>共感を示しながら指導する</li>
+                                <li>丁寧な声かけと安心できる環境</li>
+                                <li>段階的なスキルアップをサポート</li>
+                            </ul>
+                        </div>
+                        <div class="highlight-box bad-practice">
+                            <p><strong>🚫 NGアプローチ</strong></p>
+                            <ul>
+                                <li>圧迫感のある注意や叱責</li>
+                                <li>急かしたり無理強いする指導</li>
+                                <li>大勢の前での指摘や批判</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🗣 効果的な声かけ例</h4>
+                        <div class="highlight-box">
+                            <ul>
+                                <li>「あなたの雰囲気がとても良くて安心する」</li>
+                                <li>「優しさがお客様に伝わってるよ」</li>
+                                <li>「聞き上手で素晴らしいですね」</li>
+                                <li>「いつも気配りありがとう」</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dタイプ：魅せる型 -->
+                <div class="type-card type-d">
+                    <div class="type-header">
+                        <div class="type-emoji">💋</div>
+                        <div class="type-title">
+                            <h3>Dタイプ：魅せる型</h3>
+                            <div class="type-subtitle">セクシー・個性派・目立ちたがり</div>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>✅ 特徴・性格</h4>
+                        <ul>
+                            <li>個性的で存在感がある</li>
+                            <li>ビジュアルやスタイルにこだわり</li>
+                            <li>自分の世界観を持っている</li>
+                            <li>注目されることを好む</li>
+                        </ul>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🎯 効果的な指導方針</h4>
+                        <div class="highlight-box good-practice">
+                            <p><strong>◎ 推奨アプローチ</strong></p>
+                            <ul>
+                                <li>個性を活かして任せる方針</li>
+                                <li>ビジュアルや表現力を尊重</li>
+                                <li>クリエイティブな仕事を依頼</li>
+                                <li>SNSや宣伝活動で力を発揮させる</li>
+                            </ul>
+                        </div>
+                        <div class="highlight-box bad-practice">
+                            <p><strong>🚫 NGアプローチ</strong></p>
+                            <ul>
+                                <li>画一的なルールの押し付け</li>
+                                <li>個性を否定する指導</li>
+                                <li>自由を過度に制限する管理</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="management-section">
+                        <h4>🗣 効果的な声かけ例</h4>
+                        <div class="highlight-box">
+                            <ul>
+                                <li>「あなたの世界観、すごく魅力的」</li>
+                                <li>「SNSの見せ方が上手ですね」</li>
+                                <li>「個性があって印象に残る」</li>
+                                <li>「センスがいいと評判ですよ」</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 相性マトリックス -->
+            <div class="compatibility-matrix">
+                <h2>🤝 タイプ別相性マトリックス</h2>
+                <div class="matrix-grid">
+                    <div class="matrix-item type-a">
+                        <h4>🤝 A（信頼型）の相性</h4>
+                        <div class="compat-row compat-good">
+                            <span>◎ 相性良好</span>
+                            <span>C（癒し型）</span>
+                        </div>
+                        <div class="compat-row compat-bad">
+                            <span>△ 要注意</span>
+                            <span>D（魅せ型）</span>
+                        </div>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: #7f8c8d;">
+                            癒し型とは安定感・落ち着きで相性◎。魅せ型とは価値観のズレに注意。
+                        </p>
+                    </div>
+
+                    <div class="matrix-item type-b">
+                        <h4>✨ B（元気型）の相性</h4>
+                        <div class="compat-row compat-good">
+                            <span>◎ 相性良好</span>
+                            <span>D（魅せ型）</span>
+                        </div>
+                        <div class="compat-row compat-bad">
+                            <span>△ 要注意</span>
+                            <span>A（信頼型）</span>
+                        </div>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: #7f8c8d;">
+                            魅せ型とはテンションが合い盛り上がる。信頼型とは温度差に注意。
+                        </p>
+                    </div>
+
+                    <div class="matrix-item type-c">
+                        <h4>🌸 C（癒し型）の相性</h4>
+                        <div class="compat-row compat-good">
+                            <span>◎ 相性良好</span>
+                            <span>A（信頼型）</span>
+                        </div>
+                        <div class="compat-row compat-bad">
+                            <span>△ 要注意</span>
+                            <span>B（元気型）</span>
+                        </div>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: #7f8c8d;">
+                            信頼型とは落ち着きが似て相性◎。元気型には疲れてしまうことも。
+                        </p>
+                    </div>
+
+                    <div class="matrix-item type-d">
+                        <h4>💋 D（魅せる型）の相性</h4>
+                        <div class="compat-row compat-good">
+                            <span>◎ 相性良好</span>
+                            <span>B（元気型）</span>
+                        </div>
+                        <div class="compat-row compat-bad">
+                            <span>△ 要注意</span>
+                            <span>A（信頼型）</span>
+                        </div>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: #7f8c8d;">
+                            元気型とは自由×元気で楽しい関係。信頼型とはルール感覚のズレあり。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実践的なアドバイス -->
+            <div class="tips-section">
+                <h2>💡 実践的な活用アドバイス</h2>
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <h4>📋 面談での活用法</h4>
+                        <ul>
+                            <li>診断結果を参考に個別アプローチ</li>
+                            <li>タイプに合わせた目標設定</li>
+                            <li>強みを活かした役割分担</li>
+                            <li>相性を考慮したチーム編成</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-item">
+                        <h4>🎯 教育・研修での応用</h4>
+                        <ul>
+                            <li>タイプ別の指導方法の使い分け</li>
+                            <li>効果的な声かけとNG行動の把握</li>
+                            <li>個性を活かしたスキルアップ</li>
+                            <li>モチベーション維持の工夫</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-item">
+                        <h4>👥 チームマネジメント</h4>
+                        <ul>
+                            <li>相性の良いペアでのシフト組み</li>
+                            <li>タイプ別の役割分担最適化</li>
+                            <li>対立しやすい組み合わせの回避</li>
+                            <li>バランスの取れた店舗運営</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-item">
+                        <h4>📈 売上向上への活用</h4>
+                        <ul>
+                            <li>タイプ別の稼ぎ方アドバイス</li>
+                            <li>強みを活かした集客方法</li>
+                            <li>SNS活用の個別指導</li>
+                            <li>リピーター獲得戦略の立案</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

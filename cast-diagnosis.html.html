@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>あなたはどのタイプ？風俗嬢タイプ診断</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a8edea 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        .intro-box h2 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .intro-box p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            border-left: 6px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #fff, #f8f9ff);
+            transform: translateX(8px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+        }
+
+        .analyze-btn {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            margin: 40px auto;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hearts" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse"><text x="7.5" y="10" text-anchor="middle" fill="white" opacity="0.1" font-size="8">♡</text></pattern></defs><rect width="100" height="100" fill="url(%23hearts)"/></svg>');
+        }
+
+        .result * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.6s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .type-card {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .type-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .feature-item h4 {
+            color: #ffd700;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .feature-item p {
+            font-size: 1.05em;
+            line-height: 1.5;
+        }
+
+        .compatibility-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+
+        .compatibility-section h3 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .compat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .compat-good {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .compat-bad {
+            color: #ff6b88;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💖 あなたはどのタイプ？</h1>
+            <div class="subtitle">風俗嬢タイプ診断</div>
+            <p>自分の強みと稼ぎ方がわかる！</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-box">
+                <h2>✨ この診断でわかること</h2>
+                <p>あなたの考え方や行動から、「どんな接客スタイルが得意か」「どうやって稼げるか」がわかります！<br>
+                所要時間：5分程度。遊び感覚でやってみてね♪</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 8 問完了</div>
+
+            <form id="diagnosisForm">
+                <div class="question-container">
+                    <div class="question">Q1. お客様に接する時、どんな風に考える？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="A">
+                            A. まずは場の空気を読み、安心させたい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="B">
+                            B. 会話を盛り上げてテンションを上げたい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="C">
+                            C. 癒しと落ち着きを与えたい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="D">
+                            D. ドキッとさせるような刺激を与えたい
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q2. お店での自分の印象は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="A">
+                            A. 真面目で信頼されている
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="B">
+                            B. 明るくて人気者
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="C">
+                            C. 優しくて癒し系
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="D">
+                            D. セクシーで自信あり
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q3. 写メ日記を書くとしたら？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="A">
+                            A. 出勤連絡・マメな報告が中心
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="B">
+                            B. 日常の小ネタや明るい投稿が多い
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="C">
+                            C. ふわっとした言葉や写真で雰囲気を出す
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="D">
+                            D. セクシーショットや意味深な内容で惹きつける
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q4. 予約が被ったらどう思う？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="A">
+                            A. 順番に丁寧に対応したい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="B">
+                            B. 忙しいけどワクワクする！
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="C">
+                            C. 少し不安だけど頑張る
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="D">
+                            D. むしろ注目されて嬉しい
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q5. 自分の中で一番大事なのは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="A">
+                            A. 信頼・約束を守ること
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="B">
+                            B. 楽しさ・盛り上がり
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="C">
+                            C. 安心感・やさしさ
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="D">
+                            D. 自由・注目されること
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q6. お客様から言われて嬉しい言葉は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q6" value="A">
+                            A. 「安心して任せられるね」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="B">
+                            B. 「楽しかった、また来るね」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="C">
+                            C. 「癒されたよ、落ち着く」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="D">
+                            D. 「めっちゃドキドキした」
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q7. スタッフからどう思われてそう？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q7" value="A">
+                            A. きっちりしていて頼りになる
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="B">
+                            B. ムードメーカーで明るい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="C">
+                            C. 穏やかで控えめ
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="D">
+                            D. 自由でマイペース
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q8. 自分の接客スタイルは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q8" value="A">
+                            A. 丁寧・礼儀正しい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="B">
+                            B. ノリ良くフレンドリー
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="C">
+                            C. ゆっくり、まったり系
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="D">
+                            D. 情熱的・セクシー系
+                        </label>
+                    </div>
+                </div>
+
+                <button type="button" class="analyze-btn" id="analyzeBtn" disabled>
+                    💫 あなたのタイプを診断する
+                </button>
+            </form>
+
+            <div class="result" id="result">
+                <h2 id="resultTitle"></h2>
+                <div class="type-card" id="typeCard"></div>
+                <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                    <strong style="color: #ffd700; font-size: 1.1em;">💝 プロとして心がけて欲しいこと</strong><br><br>
+                    <p style="font-size: 1em; line-height: 1.6;">
+                        どのタイプでも、お客様への敬意と感謝の気持ちを忘れずに。自分の強みを活かしつつ、弱点も改善していく努力が稼げるキャストになるための近道です。
+                    </p>
+                    <br>
+                    <p style="font-size: 1em; line-height: 1.6;">
+                        <strong style="color: #ff6b6b;">💰 稼ぐための基本姿勢：</strong><br>
+                        ・明確な月間目標を設定し、逆算して出勤日数を決める<br>
+                        ・キテネやオキニトークで特別感を演出し、リピーターを確実に掴む<br>
+                        ・若い今が最も稼げる時期！この貴重な時間を無駄にしないで<br>
+                        ・出勤を増やせば収入も比例する。甘えは禁物、常に成長を意識して！
+                    </p>
+                </div>
+                <button type="button" class="reset-btn" onclick="resetDiagnosis()">
+                    🔄 もう一度診断する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const typeData = {
+            A: {
+                name: "信頼型",
+                emoji: "🤝",
+                subtitle: "丁寧・誠実・安心系",
+                charm: "きっちりしていて安心感バツグン！お客様からの信頼度が高い",
+                earning: "常連さんや初回のお客さんに丁寧な対応で信頼をゲットしよう！継続性が収入の鍵。キテネやオキニトークで特別感を演出して",
+                diary: "写メ日記は出勤報告＋真面目な一言で信頼度UP！マメな更新が重要",
+                advice: {
+                    strengths: "あなたの強みは信頼感と安定性。お客様が安心できる存在として価値が高い",
+                    weaknesses: "ただし、面白みに欠けることがある。たまには意外性や楽しさも演出して",
+                    earning_tips: "リピーター作りが得意なので、お客様一人一人との関係を大切に。でも新規開拓も怠らないこと。キテネで「あなただけ」感を出すのも効果的",
+                    improvement: "もう少し積極性を身につけて。受け身すぎると機会を逃すよ",
+                    goals: "月の目標売上を決めて、そのために必要な出勤日数を逆算しよう。若い今が一番稼げる時期だから、コツコツでも着実に積み重ねて"
+                }
+            },
+            B: {
+                name: "元気型",
+                emoji: "✨",
+                subtitle: "明るい・ノリ良し・人気者",
+                charm: "会話上手で場を明るくするムードメーカー！初対面でも距離を縮めるのが上手",
+                earning: "お客さんとの会話で\"また会いたい\"を引き出そう！でも話しすぎは禁物。オキニトークで特別な関係性をアピール",
+                diary: "写メ日記は明るい内容＋ちょっと笑える投稿が◎。でも品は保って",
+                advice: {
+                    strengths: "明るさとコミュニケーション力が武器。新規のお客様にも好印象を与えられる",
+                    weaknesses: "調子に乗りやすく、空気を読めないことがある。TPOを考えた行動を",
+                    earning_tips: "話術は得意だけど、聞き役に回ることも大切。お客様を立てることを忘れずに。キテネで甘え上手になるのも武器よ",
+                    improvement: "ノリだけじゃ限界がある。深みのある会話スキルも身につけて",
+                    goals: "勢いがあるうちに高い目標を設定して！出勤日数を増やせば収入も比例する。今の若さと元気は貴重な財産だから最大限活用して"
+                }
+            },
+            C: {
+                name: "癒し型",
+                emoji: "🌸",
+                subtitle: "やさしい・感性派・聞き上手",
+                charm: "穏やかな雰囲気で、お客さんが癒される存在！包容力と安心感が魅力",
+                earning: "「話を聞いてくれてありがとう」でリピートに繋げよう！でも受け身すぎはダメ。オキニトークで心の支えになって",
+                diary: "写メ日記は落ち着いた雰囲気＋写真でふんわり感を出して♪統一感を意識",
+                advice: {
+                    strengths: "癒しと安らぎを提供できる貴重な存在。疲れたお客様には特に重宝される",
+                    weaknesses: "おとなしすぎて印象が薄いことがある。もう少し積極性を見せて",
+                    earning_tips: "聞き上手は武器だけど、相槌だけじゃ物足りない。適度な返しも必要。キテネで母性を感じさせるのも効果的",
+                    improvement: "優しいだけじゃ稼げない。時には攻めの姿勢も大切よ",
+                    goals: "控えめでも目標は大胆に設定して。出勤を増やすことで安定収入を確保。若い時の癒し系は特に需要が高いから今がチャンス"
+                }
+            },
+            D: {
+                name: "魅せる型",
+                emoji: "💋",
+                subtitle: "セクシー・個性派・存在感",
+                charm: "色気やビジュアルのインパクトで惹きつける！一度会ったら忘れられない存在感",
+                earning: "「また見たい」「忘れられない」を演出するSNS活用が鍵！ただし品格は保って。キテネで虜にする技術を磨いて",
+                diary: "写メ日記はセクシー系＋意味深コメントで期待感を出して！でも下品はNG",
+                advice: {
+                    strengths: "ビジュアルと個性で他の子と差別化できる。インパクトがあって覚えられやすい",
+                    weaknesses: "自分勝手になりがちで、チームワークが苦手。協調性も必要よ",
+                    earning_tips: "見た目だけじゃ長続きしない。中身も磨かないとリピートは取れない。オキニトークで唯一無二の存在になって",
+                    improvement: "個性は大切だけど、わがままと混同しないで。プロ意識を持って",
+                    goals: "高い目標を掲げて短期集中で稼ぐのもあり。出勤日数を戦略的に増やして。若くて美しい今こそ最高の稼ぎ時よ！"
+                }
+            }
+        };
+
+        // プログレスバー更新
+        function updateProgress() {
+            const totalQuestions = 8;
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const progress = (answered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answered} / ${totalQuestions} 問完了`;
+            
+            // 全問答えた場合、分析ボタンを有効化
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            if (answered === totalQuestions) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '💫 あなたのタイプを診断する';
+            } else {
+                analyzeBtn.disabled = true;
+                analyzeBtn.textContent = `💫 あなたのタイプを診断する (${answered}/${totalQuestions})`;
+            }
+        }
+
+        // 選択肢のスタイル更新
+        function updateOptionStyles() {
+            document.querySelectorAll('.option').forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        // イベントリスナー設定
+        document.addEventListener('DOMContentLoaded', function() {
+            // ラジオボタンの変更を監視
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateProgress();
+                    updateOptionStyles();
+                });
+            });
+
+            // 分析ボタンのクリック
+            document.getElementById('analyzeBtn').addEventListener('click', analyzeDiagnosis);
+        });
+
+        function analyzeDiagnosis() {
+            const formData = new FormData(document.getElementById('diagnosisForm'));
+            const counts = { A: 0, B: 0, C: 0, D: 0 };
+            
+            // 回答を集計
+            for (let i = 1; i <= 8; i++) {
+                const answer = formData.get(`q${i}`);
+                if (answer) {
+                    counts[answer]++;
+                }
+            }
+            
+            // 最も多い回答を特定
+            let maxCount = 0;
+            let resultTypes = [];
+            
+            Object.keys(counts).forEach(type => {
+                if (counts[type] > maxCount) {
+                    maxCount = counts[type];
+                    resultTypes = [type];
+                } else if (counts[type] === maxCount && counts[type] > 0) {
+                    resultTypes.push(type);
+                }
+            });
+            
+            // 結果を表示
+            displayResult(resultTypes, counts);
+        }
+
+        function displayResult(resultTypes, counts) {
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const typeCard = document.getElementById('typeCard');
+            const compatibility = document.getElementById('compatibility');
+            
+            // 主要タイプを決定
+            const primaryType = resultTypes[0];
+            const typeInfo = typeData[primaryType];
+            
+            // タイトル設定
+            if (resultTypes.length === 1) {
+                resultTitle.innerHTML = `${typeInfo.emoji} あなたは「${typeInfo.name}」タイプです！`;
+            } else {
+                const typeNames = resultTypes.map(t => typeData[t].name).join('・');
+                resultTitle.innerHTML = `${typeInfo.emoji} あなたは複合タイプです！<br><small style="font-size: 0.7em;">（${typeNames}の要素を持っています）</small>`;
+            }
+            
+            // タイプカード
+            typeCard.innerHTML = `
+                <h3>${typeInfo.emoji} ${typeInfo.name}（${typeInfo.subtitle}）</h3>
+                
+                <div class="feature-item">
+                    <h4>📌 あなたの魅力</h4>
+                    <p>${typeInfo.charm}</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h4>💰 稼げるコツ</h4>
+                    <p>${typeInfo.earning}</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h4>✍ 写メ日記のポイント</h4>
+                    <p>${typeInfo.diary}</p>
+                </div>
+                
+                <div class="feature-item" style="background: rgba(255, 193, 7, 0.1); border-left-color: #ffc107;">
+                    <h4>💪 あなたの強み</h4>
+                    <p>${typeInfo.advice.strengths}</p>
+                </div>
+                
+                <div class="feature-item" style="background: rgba(255, 107, 107, 0.1); border-left-color: #ff6b6b;">
+                    <h4>⚠️ 改善すべき点</h4>
+                    <p>${typeInfo.advice.weaknesses}</p>
+                </div>
+                
+                <div class="feature-item" style="background: rgba(40, 167, 69, 0.1); border-left-color: #28a745;">
+                    <h4>💡 稼ぐためのアドバイス</h4>
+                    <p>${typeInfo.advice.earning_tips}</p>
+                </div>
+                
+                <div class="feature-item" style="background: rgba(220, 53, 69, 0.1); border-left-color: #dc3545;">
+                    <h4>🔥 厳しく言うけど...</h4>
+                    <p>${typeInfo.advice.improvement}</p>
+                </div>
+                
+                <div class="feature-item" style="background: rgba(138, 43, 226, 0.1); border-left-color: #8a2be2;">
+                    <h4>🎯 目標設定と若さの活用</h4>
+                    <p>${typeInfo.advice.goals}</p>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <h4 style="color: #ffd700; margin-bottom: 10px;">📊 あなたの回答分布</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 0.95em;">
+                        <div>🤝 A（信頼型）: ${counts.A}回</div>
+                        <div>✨ B（元気型）: ${counts.B}回</div>
+                        <div>🌸 C（癒し型）: ${counts.C}回</div>
+                        <div>💋 D（魅せ型）: ${counts.D}回</div>
+                    </div>
+                </div>
+            `;
+            
+            // 結果を表示
+            resultDiv.classList.add('show');
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetDiagnosis() {
+            // フォームをリセット
+            document.getElementById('diagnosisForm').reset();
+            
+            // 結果を非表示
+            document.getElementById('result').classList.remove('show');
+            
+            // プログレスバーをリセット
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0 / 8 問完了';
+            
+            // ボタンを無効化
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '💫 あなたのタイプを診断する (0/8)';
+            
+            // 選択肢のスタイルをリセット
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // トップにスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

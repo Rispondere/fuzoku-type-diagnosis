@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタッフ向け：あなたはどの指導タイプ？</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .header * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #f39c12;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 35px 30px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .intro-box h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .intro-box p {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        .question-container {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .question {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            margin-top: 2px;
+            transform: scale(1.1);
+        }
+
+        .analyze-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px auto;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(44, 62, 80, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .type-details {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .type-details h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #f39c12;
+        }
+
+        .detail-item {
+            margin: 12px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 3px solid #f39c12;
+        }
+
+        .detail-item h4 {
+            color: #f39c12;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .detail-item p {
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .compatibility-matrix {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+        }
+
+        .compatibility-matrix h3 {
+            color: #f39c12;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .matrix-table {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .matrix-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+            background: rgba(255,255,255,0.95);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            vertical-align: middle;
+        }
+
+        .matrix-table th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .matrix-table td:first-child {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .compatibility-good {
+            background: linear-gradient(135deg, #e8f5e8, #d4f4dd);
+            color: #2d5a2d;
+            font-weight: bold;
+            border-left: 3px solid #27ae60;
+        }
+
+        .compatibility-caution {
+            background: linear-gradient(135deg, #fff9e6, #fef3d4);
+            color: #8b6914;
+            font-weight: bold;
+            border-left: 3px solid #f39c12;
+        }
+
+        .compatibility-neutral {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #495057;
+            font-weight: bold;
+            border-left: 3px solid #6c757d;
+        }
+
+        .advice-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .advice-section h4 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .advice-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advice-section li {
+            margin: 8px 0;
+            padding-left: 15px;
+            position: relative;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .advice-section li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-weight: bold;
+            color: #3498db;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .matrix-table {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 スタッフ向け指導タイプ診断</h1>
+            <div class="subtitle">あなたはどの指導タイプ？</div>
+            <p>キャストとの関わり方がわかる、スタッフ自身のタイプ診断</p>
+        </div>
+
+        <div class="content">
+            <div class="intro-box">
+                <h2>🎯 この診断でわかること</h2>
+                <p>あなたの指導スタイルを4つのタイプで分析し、各キャストタイプとの相性や効果的なアプローチ方法をお伝えします。</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 12 問完了</div>
+
+            <form id="diagnosisForm">
+                <div class="question-container">
+                    <div class="question">Q1. 面談では何を大事にする？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="A">
+                            A：論理的に順序立てて話す
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="B">
+                            B：明るく楽しい雰囲気にする
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="C">
+                            C：感情や気持ちを受け止める
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="D">
+                            D：熱意を込めて鼓舞する
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q2. トラブルが起きた時の対応は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="A">
+                            A：状況を整理し、事実ベースで話す
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="B">
+                            B：明るく前向きな声かけで切り替えさせる
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="C">
+                            C：不安を聞き、共感しながら支える
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="D">
+                            D：叱咤激励で意識を変えようとする
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q3. 指導でよく使う言葉は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="A">
+                            A：「こうすれば改善できるよ」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="B">
+                            B：「いいじゃん！その調子！」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="C">
+                            C：「無理しないで。大丈夫だよ」
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="D">
+                            D：「絶対できる！信じてやってみて」
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q4. 注意する時のスタイルは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="A">
+                            A：冷静に説明して納得を促す
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="B">
+                            B：柔らかく冗談まじりで伝える
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="C">
+                            C：まず聞いてから否定せずに伝える
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="D">
+                            D：強めにでも本気の想いを伝える
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q5. 会話で気にするのは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="A">
+                            A：話のロジックや順序
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="B">
+                            B：雰囲気や空気感
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="C">
+                            C：相手の表情や感情の変化
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="D">
+                            D：相手が変わろうとしているか
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q6. キャストのやる気を感じるのは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q6" value="A">
+                            A：質問や提案が増えた時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="B">
+                            B：明るく冗談を言い始めた時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="C">
+                            C：少しずつ笑顔が戻った時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="D">
+                            D：覚悟を見せて行動し始めた時
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q7. 自分の指導の強みは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q7" value="A">
+                            A：冷静さ・分析力
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="B">
+                            B：明るさ・親しみやすさ
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="C">
+                            C：優しさ・寄り添い
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="D">
+                            D：熱さ・本気度
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q8. 苦手なキャストタイプは？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q8" value="A">
+                            A：感情的すぎる・場当たり的な子
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="B">
+                            B：静かすぎて反応が薄い子
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="C">
+                            C：反発的・威圧的な子
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="D">
+                            D：無気力・変化を拒む子
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q9. 一番大事にしている価値観は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q9" value="A">
+                            A：結果・理論・改善
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="B">
+                            B：楽しさ・雰囲気・人間関係
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="C">
+                            C：信頼・誠実・安心
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="D">
+                            D：成長・変化・情熱
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q10. 指導後に満足感を感じる瞬間は？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q10" value="A">
+                            A：キャストが論理的に納得した時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="B">
+                            B：キャストが明るくなった時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="C">
+                            C：キャストが安心して話してくれた時
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="D">
+                            D：キャストの覚悟が見えた時
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q11. シフト・出勤の相談をされたら？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q11" value="A">
+                            A：無理のない計画を立てようとする
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q11" value="B">
+                            B：出やすいように明るく背中を押す
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q11" value="C">
+                            C：「体調・メンタル大丈夫？」とまず気遣う
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q11" value="D">
+                            D：「今がチャンスだよ！」と鼓舞する
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">Q12. どんな風に信頼されたい？</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q12" value="A">
+                            A：頼れる・しっかりしている
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="B">
+                            B：話しやすい・楽しい
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="C">
+                            C：優しくて親身
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="D">
+                            D：熱くて一生懸命
+                        </label>
+                    </div>
+                </div>
+
+                <button type="button" class="analyze-btn" id="analyzeBtn" disabled>
+                    📊 あなたの指導タイプを診断する
+                </button>
+            </form>
+
+            <div class="result" id="result">
+                <h2 id="resultTitle"></h2>
+                <div class="type-details" id="typeDetails"></div>
+                <div class="compatibility-matrix" id="compatibilityMatrix"></div>
+                <button type="button" class="reset-btn" onclick="resetDiagnosis()">
+                    🔄 もう一度診断する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const staffTypeData = {
+            A: {
+                name: "論理型",
+                emoji: "🅰️",
+                subtitle: "分析的で論理的。正確さと手順を重視",
+                characteristics: "計画性があり、論理的思考で物事を整理するのが得意です。",
+                strengths: "計画性、信頼感、安定感のある指導ができる",
+                weaknesses: "感情に寄り添うのが苦手な場合がある",
+                suitableCasts: ["信頼型（A）", "癒し型（C）"],
+                advice: [
+                    "データや事実に基づいた説明で信頼を得られる",
+                    "段階的な計画を立てて進捗管理をすると効果的",
+                    "感情面でのフォローも意識的に取り入れる",
+                    "論理的すぎる場合は相手の気持ちも考慮する"
+                ]
+            },
+            B: {
+                name: "フレンド型",
+                emoji: "🅱️",
+                subtitle: "明るく親しみやすい。誰とでも話しやすい雰囲気作りが得意",
+                characteristics: "コミュニケーション能力が高く、親近感を持たれやすいタイプです。",
+                strengths: "距離が近く、初対面でも安心感を与えられる",
+                weaknesses: "指導の軸がブレやすくなることがある",
+                suitableCasts: ["元気型（B）", "魅せ型（D）"],
+                advice: [
+                    "明るい雰囲気で緊張をほぐすのが得意",
+                    "楽しい関係性の中でも目標設定は明確に",
+                    "親しみやすさを活かして本音を引き出す",
+                    "時には厳しさも必要であることを忘れずに"
+                ]
+            },
+            C: {
+                name: "共感型",
+                emoji: "🅲️",
+                subtitle: "感情を読み取る力があり、安心感を与える",
+                characteristics: "相手の気持ちを理解し、心理的な安全性を提供するのが得意です。",
+                strengths: "メンタルケアや信頼関係づくりに強い",
+                weaknesses: "指導に遠慮が出やすい",
+                suitableCasts: ["癒し型（C）", "信頼型（A）"],
+                advice: [
+                    "相手の感情に寄り添い、安心できる環境を作る",
+                    "じっくりと話を聞いて信頼関係を築く",
+                    "必要な時はしっかりと指導することも大切",
+                    "共感しすぎて甘くならないよう注意する"
+                ]
+            },
+            D: {
+                name: "熱血型",
+                emoji: "🅳️",
+                subtitle: "エネルギッシュで勢いのある言葉が使える",
+                characteristics: "情熱的で、相手のモチベーションを高めることが得意なタイプです。",
+                strengths: "変化や成長を促すパワーがある",
+                weaknesses: "押しすぎてプレッシャーになることがある",
+                suitableCasts: ["魅せ型（D）", "元気型（B）"],
+                advice: [
+                    "熱意で相手のやる気を引き出すことができる",
+                    "目標達成への強いモチベーションを与えられる",
+                    "相手のペースも考慮した指導を心がける",
+                    "熱すぎる場合は冷静さも取り入れる"
+                ]
+            }
+        };
+
+        const compatibilityMatrix = {
+            "A信頼型": {
+                "A論理型": { status: "◎", advice: "安定・正確な面談ができる。計画的に成長を一緒に考える" },
+                "B フレンド型": { status: "△", advice: "やや軽く感じる傾向あり。明るさの中に目的意識を添えて" },
+                "C共感型": { status: "◎", advice: "安心感を共有できる。気になる点をやわらかく聞き出す" },
+                "D熱血型": { status: "△", advice: "圧を感じやすい。熱すぎず事実を伝える" }
+            },
+            "B元気型": {
+                "A論理型": { status: "△", advice: "指摘が強すぎると反発。褒めながら根拠を示す" },
+                "B フレンド型": { status: "◎", advice: "ノリが合って会話が弾む。一緒に盛り上がる＋アドバイス" },
+                "C共感型": { status: "○", advice: "テンション差に注意。静かに聴く時間＋褒めも忘れずに" },
+                "D熱血型": { status: "◎", advice: "活気ある関係性がつくれる。勢いを活かして目標設定" }
+            },
+            "C癒し型": {
+                "A論理型": { status: "◎", advice: "落ち着いた面談がしやすい。スピードより共感＋納得" },
+                "B フレンド型": { status: "△", advice: "テンション差が負担に。テンションを落ち着けて合わせる" },
+                "C共感型": { status: "◎", advice: "理解し合える関係に。聞く→受け止める→ゆっくり提案" },
+                "D熱血型": { status: "△", advice: "圧を感じやすい。熱量よりも安心を優先" }
+            },
+            "D魅せ型": {
+                "A論理型": { status: "△", advice: "縛られると反発しやすい。枠を決めすぎず尊重を見せる" },
+                "B フレンド型": { status: "◎", advice: "お互い自由でフラットな関係に。本人の話を尊重しつつ方向性提示" },
+                "C共感型": { status: "△", advice: "内面に入りづらいことも。表面的で終わらず、深く聴く努力を" },
+                "D熱血型": { status: "◎", advice: "信頼があれば高い成果も可能。本人の世界観を認めつつ導く" }
+            }
+        };
+
+        // プログレスバー更新
+        function updateProgress() {
+            const totalQuestions = 12;
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const progress = (answered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${answered} / ${totalQuestions} 問完了`;
+            
+            // 全問答えた場合、分析ボタンを有効化
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            if (answered === totalQuestions) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '📊 あなたの指導タイプを診断する';
+            } else {
+                analyzeBtn.disabled = true;
+                analyzeBtn.textContent = `📊 あなたの指導タイプを診断する (${answered}/${totalQuestions})`;
+            }
+        }
+
+        // 選択肢のスタイル更新
+        function updateOptionStyles() {
+            document.querySelectorAll('.option').forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        // イベントリスナー設定
+        document.addEventListener('DOMContentLoaded', function() {
+            // ラジオボタンの変更を監視
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateProgress();
+                    updateOptionStyles();
+                });
+            });
+
+            // 分析ボタンのクリック
+            document.getElementById('analyzeBtn').addEventListener('click', analyzeDiagnosis);
+        });
+
+        function analyzeDiagnosis() {
+            const formData = new FormData(document.getElementById('diagnosisForm'));
+            const counts = { A: 0, B: 0, C: 0, D: 0 };
+            
+            // 回答を集計
+            for (let i = 1; i <= 12; i++) {
+                const answer = formData.get(`q${i}`);
+                if (answer) {
+                    counts[answer]++;
+                }
+            }
+            
+            // 最も多い回答を特定
+            let maxCount = 0;
+            let resultTypes = [];
+            
+            Object.keys(counts).forEach(type => {
+                if (counts[type] > maxCount) {
+                    maxCount = counts[type];
+                    resultTypes = [type];
+                } else if (counts[type] === maxCount && counts[type] > 0) {
+                    resultTypes.push(type);
+                }
+            });
+            
+            // 結果を表示
+            displayResult(resultTypes, counts);
+        }
+
+        function displayResult(resultTypes, counts) {
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const typeDetails = document.getElementById('typeDetails');
+            const compatibilityMatrix = document.getElementById('compatibilityMatrix');
+            
+            // 主要タイプを決定
+            const primaryType = resultTypes[0];
+            const typeInfo = staffTypeData[primaryType];
+            
+            // タイトル設定
+            if (resultTypes.length === 1) {
+                resultTitle.innerHTML = `${typeInfo.emoji} あなたは「${typeInfo.name}」タイプです！`;
+            } else {
+                const typeNames = resultTypes.map(t => staffTypeData[t].name).join('・');
+                resultTitle.innerHTML = `${typeInfo.emoji} あなたは複合タイプです！<br><small style="font-size: 0.7em;">（${typeNames}の要素を持っています）</small>`;
+            }
+            
+            // タイプ詳細
+            typeDetails.innerHTML = `
+                <h3>${typeInfo.emoji} ${typeInfo.name}（${typeInfo.subtitle}）</h3>
+                
+                <div class="detail-item">
+                    <h4>🎯 特徴</h4>
+                    <p>${typeInfo.characteristics}</p>
+                </div>
+                
+                <div class="detail-item">
+                    <h4>💪 強み</h4>
+                    <p>${typeInfo.strengths}</p>
+                </div>
+                
+                <div class="detail-item">
+                    <h4>⚠️ 注意点</h4>
+                    <p>${typeInfo.weaknesses}</p>
+                </div>
+                
+                <div class="detail-item">
+                    <h4>🎯 相性の良いキャストタイプ</h4>
+                    <p>${typeInfo.suitableCasts.join('、')}</p>
+                </div>
+                
+                <div class="advice-section">
+                    <h4>💡 指導アドバイス</h4>
+                    <ul>
+                        ${typeInfo.advice.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; border-left: 4px solid #3498db;">
+                    <h4 style="color: #3498db; margin-bottom: 8px;">📊 あなたの回答分布</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 0.85em;">
+                        <div>🅰️ A（論理型）: ${counts.A}回</div>
+                        <div>🅱️ B（フレンド型）: ${counts.B}回</div>
+                        <div>🅲️ C（共感型）: ${counts.C}回</div>
+                        <div>🅳️ D（熱血型）: ${counts.D}回</div>
+                    </div>
+                </div>
+            `;
+            
+            // 相性マトリックス
+            compatibilityMatrix.innerHTML = `
+                <h3>🤝 キャスト×スタッフ 相性＆面談アドバイス表</h3>
+                
+                <div class="matrix-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>キャストタイプ</th>
+                                <th>🅰️論理型</th>
+                                <th>🅱️フレンド型</th>
+                                <th>🅲️共感型</th>
+                                <th>🅳️熱血型</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>🤝 A：信頼型</strong></td>
+                                <td class="compatibility-good">◎<br><small>安定・正確な面談</small></td>
+                                <td class="compatibility-caution">△<br><small>やや軽く感じる</small></td>
+                                <td class="compatibility-good">◎<br><small>安心感を共有</small></td>
+                                <td class="compatibility-caution">△<br><small>圧を感じやすい</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>✨ B：元気型</strong></td>
+                                <td class="compatibility-caution">△<br><small>指摘が強すぎると反発</small></td>
+                                <td class="compatibility-good">◎<br><small>ノリが合って弾む</small></td>
+                                <td class="compatibility-neutral">○<br><small>テンション差に注意</small></td>
+                                <td class="compatibility-good">◎<br><small>活気ある関係性</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🌸 C：癒し型</strong></td>
+                                <td class="compatibility-good">◎<br><small>落ち着いた面談</small></td>
+                                <td class="compatibility-caution">△<br><small>テンション差が負担</small></td>
+                                <td class="compatibility-good">◎<br><small>理解し合える関係</small></td>
+                                <td class="compatibility-caution">△<br><small>圧を感じやすい</small></td>
+                            </tr>
+                            <tr>
+                                <td><strong>💋 D：魅せ型</strong></td>
+                                <td class="compatibility-caution">△<br><small>縛られると反発</small></td>
+                                <td class="compatibility-good">◎<br><small>自由でフラット</small></td>
+                                <td class="compatibility-caution">△<br><small>内面に入りづらい</small></td>
+                                <td class="compatibility-good">◎<br><small>高い成果も可能</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="advice-section" style="margin-top: 20px;">
+                    <h4>📋 面談・指導アドバイスまとめ</h4>
+                    <ul>
+                        <li><strong>◎ 相性が良い</strong> → 自然な関係構築がしやすく、信頼関係が生まれやすい</li>
+                        <li><strong>△ 注意が必要</strong> → アプローチの工夫が重要。接し方次第で関係性は改善可能</li>
+                        <li>各タイプに合わせた「声かけ」「提案スタイル」「ペース設定」で、キャストの成長と定着につながります</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; border-left: 4px solid #3498db;">
+                    <strong style="color: #3498db;">💡 重要なポイント：</strong><br>
+                    どのタイプでも、相手の個性を理解し、柔軟にアプローチを変えることが成功の鍵です。自分の得意なスタイルを活かしつつ、苦手な部分は意識的に補完していきましょう。
+                </div>
+            `;
+            
+            // 結果を表示
+            resultDiv.classList.add('show');
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetDiagnosis() {
+            // フォームをリセット
+            document.getElementById('diagnosisForm').reset();
+            
+            // 結果を非表示
+            document.getElementById('result').classList.remove('show');
+            
+            // プログレスバーをリセット
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0 / 12 問完了';
+            
+            // ボタンを無効化
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '📊 あなたの指導タイプを診断する (0/12)';
+            
+            // 選択肢のスタイルをリセット
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // トップにスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
